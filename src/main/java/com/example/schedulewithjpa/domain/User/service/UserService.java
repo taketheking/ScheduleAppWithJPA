@@ -4,6 +4,7 @@ import com.example.schedulewithjpa.domain.User.Entity.User;
 import com.example.schedulewithjpa.domain.User.dto.SignUpResponseDto;
 import com.example.schedulewithjpa.domain.User.dto.UserResponseDto;
 import com.example.schedulewithjpa.domain.User.repository.UserRepository;
+import com.example.schedulewithjpa.domain.base.Valid.AccessWrongValid;
 import com.example.schedulewithjpa.global.Config.PasswordEncoder;
 import com.example.schedulewithjpa.global.exception.NotMatchPwException;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-    public final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final AccessWrongValid accessWrongValid;
 
     public SignUpResponseDto signUp(String username, String password, String email) {
 
@@ -37,7 +39,8 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(Long id, String password) {
+    public void delete(Long id, String password, Long userId) {
+        accessWrongValid.AccessMisMatchId(id, userId);
 
         User user = userRepository.findByIdOrElseThrow(id);
 

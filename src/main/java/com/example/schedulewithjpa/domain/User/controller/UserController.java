@@ -53,10 +53,10 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             throw new BadValueException(String.valueOf(bindingResult.getFieldError().getDefaultMessage()));
         }
-
-        userService.delete(id, requestDto.getPassword());
-
         HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(Const.LOGIN_USER);
+
+        userService.delete(id, requestDto.getPassword(), user.getId());
         session.invalidate();
 
         return new ResponseEntity<>(HttpStatus.OK);

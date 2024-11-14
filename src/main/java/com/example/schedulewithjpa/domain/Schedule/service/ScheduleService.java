@@ -5,6 +5,7 @@ import com.example.schedulewithjpa.domain.Schedule.dto.ScheduleResponseDto;
 import com.example.schedulewithjpa.domain.Schedule.repository.ScheduleRepository;
 import com.example.schedulewithjpa.domain.User.Entity.User;
 import com.example.schedulewithjpa.domain.User.repository.UserRepository;
+import com.example.schedulewithjpa.domain.base.Valid.AccessWrongValid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,8 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
+
+    private final AccessWrongValid accessWrongValid;
 
     public ScheduleResponseDto save(String title, String contents, String email) {
         User user = userRepository.findUserByEmailOrElseThrow(email);
@@ -40,9 +43,10 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateById(Long id, String title, String contents) {
-
+    public ScheduleResponseDto updateById(Long id, String title, String contents, Long userId) {
         Schedule schedule = scheduleRepository.findByIdOrElseThrow(id);
+
+        accessWrongValid.AccessMisMatchId(schedule.getUser().getId(), userId);
 
         if (title != null) {
             schedule.updateTitle(title);
@@ -56,8 +60,10 @@ public class ScheduleService {
 
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, Long userId) {
         Schedule schedule = scheduleRepository.findByIdOrElseThrow(id);
+
+        accessWrongValid.AccessMisMatchId(schedule.getUser().getId(), userId);
 
         scheduleRepository.delete(schedule);
     }

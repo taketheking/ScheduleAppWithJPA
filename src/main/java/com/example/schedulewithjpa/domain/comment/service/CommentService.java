@@ -4,6 +4,7 @@ import com.example.schedulewithjpa.domain.Schedule.Entity.Schedule;
 import com.example.schedulewithjpa.domain.Schedule.repository.ScheduleRepository;
 import com.example.schedulewithjpa.domain.User.Entity.User;
 import com.example.schedulewithjpa.domain.User.repository.UserRepository;
+import com.example.schedulewithjpa.domain.base.Valid.AccessWrongValid;
 import com.example.schedulewithjpa.domain.comment.Entity.Comment;
 import com.example.schedulewithjpa.domain.comment.dto.CommentResponseDto;
 import com.example.schedulewithjpa.domain.comment.repository.CommentRepository;
@@ -20,6 +21,7 @@ public class CommentService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final AccessWrongValid accessWrongValid;
 
     public CommentResponseDto save(String comments, String email, Long scheduleId) {
         User user = userRepository.findUserByEmailOrElseThrow(email);
@@ -50,9 +52,11 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto updateById(Long id, String comments) {
+    public CommentResponseDto updateById(Long id, String comments, Long userId) {
 
         Comment comment = commentRepository.findByIdOrElseThrow(id);
+
+        accessWrongValid.AccessMisMatchId(comment.getUser().getId(), userId);
 
         if (comments != null) {
             comment.updateComment(comments);
@@ -62,8 +66,10 @@ public class CommentService {
 
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, Long userId) {
         Comment comment = commentRepository.findByIdOrElseThrow(id);
+
+        accessWrongValid.AccessMisMatchId(comment.getUser().getId(), userId);
 
         commentRepository.delete(comment);
     }
