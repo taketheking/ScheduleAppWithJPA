@@ -12,9 +12,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
     }
 
-    Optional<User> findUserByUsername(String username);
+    Optional<User> findUserByEmail(String username);
 
-    default User findUserByUsernameOrElseThrow(String username) {
-        return findUserByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist username = " + username));
+    default User findUserByEmailOrElseThrow(String username) {
+        return findUserByEmail(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist username = " + username));
     }
+
+    Optional<User> findUserByEmailAndPassword(String email, String password);
+
+    default User findUserByEmailAndPasswordOrElseThrow(String email, String password) {
+        return findUserByEmailAndPassword(email, password).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인에 실패하였습니다"));
+    }
+
 }

@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("schedules")
 @RequiredArgsConstructor
+@RequestMapping("schedules")
 public class ScheduleController {
 
-    ScheduleService scheduleService;
+    private final ScheduleService scheduleService;
 
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> save(@RequestBody CreateScheduleRequestDto requestDto) {
 
-        ScheduleResponseDto scheduleResponseDto = scheduleService.save(requestDto.getTitle(), requestDto.getContents(), requestDto.getUsername());
+        ScheduleResponseDto scheduleResponseDto = scheduleService.save(requestDto.getTitle(), requestDto.getContents(), requestDto.getEmail());
 
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.CREATED);
     }
@@ -42,7 +42,7 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateById(@PathVariable Long id, @RequestBody UpdateScheduleRequestDto requestDto) {
 
         ScheduleResponseDto scheduleResponseDto = scheduleService.updateById(id, requestDto.getTitle(), requestDto.getContents());

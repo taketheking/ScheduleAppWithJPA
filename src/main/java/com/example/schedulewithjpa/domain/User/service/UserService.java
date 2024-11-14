@@ -5,11 +5,7 @@ import com.example.schedulewithjpa.domain.User.dto.SignUpResponseDto;
 import com.example.schedulewithjpa.domain.User.dto.UserResponseDto;
 import com.example.schedulewithjpa.domain.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,16 +24,21 @@ public class UserService {
 
     public UserResponseDto findById(Long id) {
 
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        // NPE 방지
-        if (optionalUser.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
-        }
-
-        User findUser = optionalUser.get();
+        User findUser = userRepository.findByIdOrElseThrow(id);
 
         return new UserResponseDto(findUser.getUsername(), findUser.getEmail());
     }
 
+    public void delete(Long id) {
+
+        User user = userRepository.findByIdOrElseThrow(id);
+
+        userRepository.delete(user);
+    }
+
+    public User login(String email, String password) {
+
+        return userRepository.findUserByEmailAndPasswordOrElseThrow(email, password);
+
+    }
 }

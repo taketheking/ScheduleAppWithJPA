@@ -18,8 +18,8 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
 
-    public ScheduleResponseDto save(String title, String contents, String username) {
-        User user = userRepository.findUserByUsernameOrElseThrow(username);
+    public ScheduleResponseDto save(String title, String contents, String email) {
+        User user = userRepository.findUserByEmailOrElseThrow(email);
 
         Schedule schedule = new Schedule(title, contents, user);
 
@@ -57,6 +57,9 @@ public class ScheduleService {
     }
 
     public void delete(Long id) {
-        scheduleRepository.deleteById(id);
+        Schedule schedule = scheduleRepository.findByIdOrElseThrow(id);
+
+        scheduleRepository.delete(schedule);
     }
+
 }
