@@ -2,8 +2,12 @@ package com.example.schedulewithjpa.domain.Schedule.Entity;
 
 import com.example.schedulewithjpa.domain.User.Entity.User;
 import com.example.schedulewithjpa.domain.base.Entity.BaseEntity;
+import com.example.schedulewithjpa.domain.comment.Entity.Comment;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -21,6 +25,9 @@ public class Schedule extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public Schedule() {
 
