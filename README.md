@@ -1068,6 +1068,14 @@ DELETE FROM user WHERE id = 1;
 
 ## 5. 예시 API 결과 이미지 
 
+![회원가입](https://github.com/user-attachments/assets/e4c90bfd-908b-41a7-beff-4a5302de364f)
+
+![로그인](https://github.com/user-attachments/assets/959ce55d-836a-467b-9cae-d5dc010076a4)
+
+![로그아웃](https://github.com/user-attachments/assets/6b1b91cd-0464-454d-a6e0-38f95e08aca5)
+
+![유저조회](https://github.com/user-attachments/assets/e4bc3ebf-b50d-4350-808e-2cfaf50299dc)
+
 
 ## 6. 코드 설명 및 트러블 슈팅
 
