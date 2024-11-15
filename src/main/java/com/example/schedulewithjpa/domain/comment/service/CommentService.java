@@ -32,7 +32,7 @@ public class CommentService {
 
         Comment savedComment = commentRepository.save(commentObj);
 
-        return new CommentResponseDto(savedComment.getId(), savedComment.getComment(), savedComment.getUser().getUsername());
+        return CommentResponseDto.toDto(savedComment);
     }
 
     public List<CommentResponseDto> findAllByScheduleId(Long scheduleId) {
@@ -48,7 +48,7 @@ public class CommentService {
     public CommentResponseDto findById(Long id) {
         Comment comment = commentRepository.findByIdOrElseThrow(id);
 
-        return new CommentResponseDto(comment.getId(), comment.getComment(), comment.getUser().getUsername());
+        return CommentResponseDto.toDto(comment);
     }
 
     @Transactional
@@ -62,7 +62,7 @@ public class CommentService {
             comment.updateComment(comments);
         }
 
-        return new CommentResponseDto(comment.getId(), comment.getComment(), comment.getUser().getUsername());
+        return CommentResponseDto.toDto(comment);
 
     }
 

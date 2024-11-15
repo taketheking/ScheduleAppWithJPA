@@ -23,19 +23,24 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto, BindingResult bindingResult) {
+    public ResponseEntity<UserResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             throw new BadValueException(String.valueOf(bindingResult.getFieldError().getDefaultMessage()));
         }
 
-        SignUpResponseDto signUpResponseDto =
+        HttpSession session = request.getSession(false);
+        if(session != null) {
+            throw new RuntimeException("로그인한 상태로 회원가입할 수 없습니다.");
+        }
+
+        UserResponseDto userResponseDto =
                 userService.signUp(
                         requestDto.getUsername(),
                         requestDto.getPassword(),
                         requestDto.getEmail()
                 );
 
-        return new ResponseEntity<>(signUpResponseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
     }
 
 

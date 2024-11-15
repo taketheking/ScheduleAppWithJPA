@@ -1,7 +1,6 @@
 package com.example.schedulewithjpa.domain.User.service;
 
 import com.example.schedulewithjpa.domain.User.Entity.User;
-import com.example.schedulewithjpa.domain.User.dto.SignUpResponseDto;
 import com.example.schedulewithjpa.domain.User.dto.UserResponseDto;
 import com.example.schedulewithjpa.domain.User.repository.UserRepository;
 import com.example.schedulewithjpa.domain.base.Valid.AccessWrongValid;
@@ -20,7 +19,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AccessWrongValid accessWrongValid;
 
-    public SignUpResponseDto signUp(String username, String password, String email) {
+    public UserResponseDto signUp(String username, String password, String email) {
 
         String encodedPassword = passwordEncoder.encode(password);
 
@@ -28,14 +27,14 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        return new SignUpResponseDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
+        return UserResponseDto.toDto(savedUser);
     }
 
     public UserResponseDto findById(Long id) {
 
         User user = userRepository.findByIdOrElseThrow(id);
 
-        return new UserResponseDto(user.getUsername(), user.getEmail());
+        return UserResponseDto.toDto(user);
     }
 
     @Transactional

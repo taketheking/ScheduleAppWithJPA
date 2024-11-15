@@ -54,8 +54,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
-    // 잘못된 id 접근 예외처리
-    @ExceptionHandler(NotExistIdException.class)
+    @ExceptionHandler({NotExistIdException.class, RuntimeException.class})
     public ResponseEntity<Object> handleIdNotExist(Exception ex) {
         // 오류 메세지 저장
         Map<String, String> errors = new HashMap<>();
