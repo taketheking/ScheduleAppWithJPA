@@ -19,4 +19,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     default List<Comment> findAllByScheduleId(Long scheduleId) {
         return findAll().stream().filter(comment -> Objects.equals(comment.getSchedule().getId(), scheduleId)).toList();
     }
+
 }

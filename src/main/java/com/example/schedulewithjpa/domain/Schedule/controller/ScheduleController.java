@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -37,9 +39,9 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAll() {
+    public ResponseEntity<List<ScheduleResponseDto>> findAll(@PageableDefault() Pageable pageable) {
 
-        List<ScheduleResponseDto> scheduleResponseDtoList = scheduleService.findAll();
+        List<ScheduleResponseDto> scheduleResponseDtoList = scheduleService.findAll(pageable);
 
         return new ResponseEntity<>(scheduleResponseDtoList, HttpStatus.OK);
     }
